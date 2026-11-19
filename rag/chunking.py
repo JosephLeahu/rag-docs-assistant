@@ -61,7 +61,7 @@ def chunk_document(doc: str, text: str, max_chars: int = 900, overlap_paragraphs
     Consecutive chunks inside a section share `overlap_paragraphs` paragraphs so a
     fact split across a boundary is still retrievable.
     """
-    title_match = re.search(r"^#\s+(.*)", text, flags=re.M)
+    title_match = re.search(r"^#\s+(.*)", text, flags=re.MULTILINE)
     title = title_match.group(1).strip() if title_match else doc
     chunks: list[Chunk] = []
 

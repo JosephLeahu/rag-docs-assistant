@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 from .knowledge_base import KnowledgeBase, SearchHit
 
@@ -48,7 +48,7 @@ def _hit_dict(i: int, h: SearchHit) -> dict:
 
 
 class Answerer:
-    def __init__(self, kb: KnowledgeBase, client: Optional[Any] = None, model: str = DEFAULT_MODEL, k: int = 4):
+    def __init__(self, kb: KnowledgeBase, client: Any | None = None, model: str = DEFAULT_MODEL, k: int = 4):
         self.kb, self.model, self.k = kb, model, k
         if client is None and os.getenv("ANTHROPIC_API_KEY"):
             import anthropic

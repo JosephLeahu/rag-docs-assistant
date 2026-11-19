@@ -7,8 +7,13 @@ from evals.run_eval import load_questions, retrieval_metrics
 from rag.answer import NO_ANSWER, Answerer, build_prompt, parse_citations
 from rag.chunking import chunk_document
 from rag.knowledge_base import KnowledgeBase
-from rag.retrieval import BM25, DenseRetriever, HybridRetriever, reciprocal_rank_fusion, tokenize
-
+from rag.retrieval import (
+    BM25,
+    DenseRetriever,
+    HybridRetriever,
+    reciprocal_rank_fusion,
+    tokenize,
+)
 
 # ---- chunking ----------------------------------------------------------------
 

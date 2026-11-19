@@ -7,15 +7,12 @@ from __future__ import annotations
 import math
 import re
 from collections import Counter
-from typing import Callable, Protocol, Sequence
+from collections.abc import Callable, Sequence
+from typing import Protocol
 
 import numpy as np
 
-STOPWORDS = set("""
-a an and are as at be been but by can could did do does for from had has have how i if in into is it its
-of on or so such than that the their them then there these they this to was were what when where which
-who why will with would you your about after before also more most no not only other over same some very
-""".split())
+STOPWORDS = {"a", "an", "and", "are", "as", "at", "be", "been", "but", "by", "can", "could", "did", "do", "does", "for", "from", "had", "has", "have", "how", "i", "if", "in", "into", "is", "it", "its", "of", "on", "or", "so", "such", "than", "that", "the", "their", "them", "then", "there", "these", "they", "this", "to", "was", "were", "what", "when", "where", "which", "who", "why", "will", "with", "would", "you", "your", "about", "after", "before", "also", "more", "most", "no", "not", "only", "other", "over", "same", "some", "very"}
 
 
 def tokenize(text: str) -> list[str]:
