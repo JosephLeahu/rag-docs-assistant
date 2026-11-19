@@ -1,0 +1,44 @@
+{
+  "mode": "bm25",
+  "chunks": 24,
+  "retrieval": {
+    "n": 35,
+    "recall@1": 0.914,
+    "recall@3": 0.943,
+    "recall@5": 0.943,
+    "mrr": 0.929,
+    "not_rank_1": [
+      {
+        "id": 28,
+        "question": "When did the government's volcano office in Vancouver open?",
+        "expected": "cascades-volcano-observatory",
+        "got": [
+          "monitoring-methods",
+          "cascades-volcano-observatory",
+          "cascades-volcano-observatory"
+        ],
+        "rank": 2
+      },
+      {
+        "id": 32,
+        "question": "Is breathing the dust after an eruption harmful?",
+        "expected": "volcanic-ash",
+        "got": [
+          "mount-st-helens-1980",
+          "volcano-alert-levels",
+          "volcano-alert-levels"
+        ],
+        "rank": null
+      },
+      {
+        "id": 35,
+        "question": "Why do experts combine several kinds of measurements?",
+        "expected": "monitoring-methods",
+        "got": [
+          "cascades-volcano-observatory"
+        ],
+        "rank": null
+      }
+    ]
+  }
+}

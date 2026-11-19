@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Volcano Docs Q&amp;A</title>
+<style>
+  :root { --bg:#f7f6f3; --card:#fff; --ink:#1f2328; --muted:#6b7280; --line:#e5e3dd; --accent:#b4441c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif; background:var(--bg); color:var(--ink); }
+  .wrap { max-width:760px; margin:0 auto; padding:32px 16px; }
+  h1 { font-size:22px; margin:0 0 4px; } .sub { color:var(--muted); margin:0 0 20px; }
+  form { display:flex; gap:8px; }
+  input { flex:1; padding:12px; border:1px solid var(--line); border-radius:8px; font:inherit; }
+  button { padding:0 18px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-weight:600; cursor:pointer; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 20px; }
+  .chip { font-size:13px; padding:4px 10px; border:1px solid var(--line); border-radius:999px; background:#fff; cursor:pointer; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+  .answer { font-size:16px; white-space:pre-wrap; }
+  sup { color:var(--accent); font-weight:700; }
+  .src { font-size:13px; border-top:1px solid var(--line); padding-top:8px; margin-top:8px; }
+  .src b { color:var(--accent); } .muted { color:var(--muted); font-size:13px; }
+  .warn { color:#b42318; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Volcano Docs Q&amp;A</h1>
+  <p class="sub">Answers grounded in the indexed documents, with citations you can check.</p>
+  <form id="f"><input id="q" placeholder="Ask about lahars, alert levels, Mount St. Helens…" required><button>Ask</button></form>
+  <div class="chips" id="chips"></div>
+  <div id="out"></div>
+</div>
+<script>
+const examples = ["What does the WATCH alert level mean?", "Why is Mount Rainier a lahar risk?",
+                  "How are volcanoes monitored?", "What happened on May 18, 1980?"];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const chips = document.getElementById('chips');
+examples.forEach(e => { const b = document.createElement('span'); b.className='chip'; b.textContent=e;
+  b.onclick = () => { document.getElementById('q').value = e; ask(e); }; chips.appendChild(b); });
+
+async function ask(question) {
+  const out = document.getElementById('out');
+  out.innerHTML = '<p class="muted">Searching…</p>';
+  const res = await fetch('/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({question})});
+  if (!res.ok) { out.innerHTML = '<p class="warn">Request failed.</p>'; return; }
+  const a = await res.json();
+  const answer = esc(a.answer).replace(/\[(\d+)\]/g, '<sup>[$1]</sup>');
+  out.innerHTML = `<div class="card"><div class="answer">${answer}</div>
+    ${a.grounded ? '' : '<p class="warn">Warning: answer cites a source that was not retrieved.</p>'}
+    ${a.retrieved.map(s => `<div class="src"><b>[${s.n}]</b> ${esc(s.title)} › ${esc(s.section)}
+       <span class="muted">(score ${s.score})</span><div class="muted">${esc(s.snippet)}…</div></div>`).join('')}
+  </div>`;
+}
+document.getElementById('f').addEventListener('submit', e => { e.preventDefault(); ask(document.getElementById('q').value); });
+</script>
+</body>
+</html>
